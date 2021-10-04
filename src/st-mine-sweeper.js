@@ -1,4 +1,4 @@
-import { NotImplementedError } from '../extensions/index.js';
+import { NotImplementedError } from '../extensions/index.js'
 
 /**
  * In the popular Minesweeper game you have a board with some mines and those cells
@@ -23,7 +23,41 @@ import { NotImplementedError } from '../extensions/index.js';
  *  [1, 1, 1]
  * ]
  */
-export default function minesweeper (/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+export default function minesweeper(m) {
+  const l = m.length
+  const n = m[0].length
+  const result = Array(l)
+    .fill(null)
+    .map((a) => new Array(l).fill(null))
+
+  for (let i = 0; i < l; i++) {
+    for (let j = 0; j < n; j++) {
+      if (!i) {
+        result[i][j] =
+          (j ? +m[i][j - 1] + +!!m[i + 1][j - 1] : 0) +
+          +!!m[i][j + 1] +
+          +!!m[i + 1][j + 1] +
+          +!!m[i + 1][j]
+
+        continue
+      }
+      if (i === l - 1) {
+        result[i][j] =
+          (j ? +m[i - 1][j - 1] + +m[i][j - 1] : 0) +
+          +m[i - 1][j] +
+          !!m[i - 1][j + 1] +
+          !!m[i][j + 1]
+        continue
+      }
+      result[i][j] = j
+        ? +m[i - 1][j - 1] + +m[i][j - 1] + +!!m[i + 1][j]
+        : 0 +
+          +!!m[i][j + 1] +
+          +!!m[i + 1][j + 1] +
+          +!!m[i + 1][j] +
+          +m[i - 1][j] +
+          +!!m[i - 1][j + 1]
+    }
+  }
+  return result
 }
